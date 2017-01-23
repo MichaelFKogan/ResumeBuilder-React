@@ -40,7 +40,7 @@ export default React.createClass({
             <p className="companyName"><strong>{search.company}</strong></p>
         </div>
         <div className="row">
-            <button onClick="" className=" btn btn-default btn-xs saveButton">Save</button>
+          {/*  <button onClick="" className=" btn btn-default btn-xs saveButton">Save</button> */}
           {/*  <p className="snippet">{search.snippet}</p>   */}
         </div>
             <hr className="hrResults"/>
@@ -58,8 +58,6 @@ export default React.createClass({
 
 
 </div> {/* END CONTAINER */}
-
-<footer className="footer text-center"><p>@ Copyright Resume Builder 2017</p></footer>
 
 
 {/* CLOSING DIV */}

@@ -292,10 +292,13 @@ margin-bottom: 15px;
 
 .footer{
     height:75px;
+    width:100%;
     background: rgba(238, 238, 238, .92);
-    margin-top: 25px;
+    margin-top: 111px;
     padding-top: 30px;
     min-width:720px;
+    position:relative;
+    bottom:0;
 }
 
 

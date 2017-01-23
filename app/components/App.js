@@ -10,14 +10,53 @@ import Results from './children/Results'
 
 import helpers from '../utils/helpers'
 
+
+
+
+var locale = "";
 var results = [];
+
+
+  // GOOGLE PLACES AUTOCOMPLETE
+// ============================================
+
+   function initialize() {
+
+    var options = {
+  types: ['(cities)'],
+  componentRestrictions: {country: "us"}
+ };
+
+      var input = document.getElementById('location');
+      var autocomplete = new google.maps.places.Autocomplete(input, options);
+
+        autocomplete.addListener('place_changed', fillInAddress);
+   
+
+   function fillInAddress() {
+  // Get the place details from the autocomplete object.
+  var place = autocomplete.getPlace();
+  var address = place.formatted_address.replace(", USA","")
+
+          $('#location').val(address);
+        locale = address;
+
+}
+}
+
+   google.maps.event.addDomListener(window, 'load', initialize);
+
+
+// GOOGLE PLACES AUTOCOMPLETE
+// ============================================
+
 
 export default React.createClass({
   
 // GETINITIALSTATE
 //============================================================
   getInitialState: function() {
-    return { location: "", keyword: "", results: [], history: "" };
+    return { location: "", value: "", keyword: "", results: [], history: "" };
   },
 
 
@@ -26,9 +65,6 @@ export default React.createClass({
   handleChange: function(event) {
     
     switch(event.target.id){
-        case "location":
-        this.setState({ location: event.target.value});
-            break;
         case "keyword":
             this.setState({ keyword: event.target.value });
             break;
@@ -40,10 +76,9 @@ export default React.createClass({
   handleSubmit: function(event) {
       event.preventDefault();
       var results = [];
-      // console.log("ADDRESS: " + address)
 
       // Search Indeed 0-25 Search Results
-      helpers.runQuery(this.state.location, this.state.keyword).then(function(data){
+      helpers.runQuery(locale, this.state.keyword).then(function(data){
         if (data !== this.state.results){
             for(var i=0;i<=data.length-1;i++){
                 results.push(data[i]);
@@ -52,45 +87,12 @@ export default React.createClass({
         }
       }.bind(this));  
 
-      // Search Indeed 25-50 Search Results
-
-      //   helpers.runQueryOne(this.state.location, this.state.keyword).then(function(data){
-      //   if (data !== this.state.results){            
-      //       for(var i=0;i<=data.length-1;i++){
-      //           results.push(data[i]);
-      //       }        
-      //       this.setState({results: results});
-      //   }
-      // }.bind(this));  
-
-      // Search Indeed 50-75 Search Results
-
-      //   helpers.runQueryTwo(this.state.location, this.state.keyword).then(function(data){
-      //   if (data !== this.state.results){            
-      //       for(var i=0;i<=data.length-1;i++){
-      //           results.push(data[i]);
-      //       }        
-      //       this.setState({results: results});
-      //   }
-      // }.bind(this));  
-
-      // Search Indeed 75-100 Search Results
-
-      //   helpers.runQueryThree(this.state.location, this.state.keyword).then(function(data){
-      //   if (data !== this.state.results){            
-      //       for(var i=0;i<=data.length-1;i++){
-      //           results.push(data[i]);
-      //       }       
-      //       this.setState({results: results});
-      //   }
-      // }.bind(this));  
-
       this.setState({results: [] });
-      this.setState({ keyword: ""});
+
+      $('#keyword').val("");
+      $('#location').val("");
 
   },
-
-
 
 
   render() {
@@ -112,8 +114,8 @@ export default React.createClass({
 
                     <li><NavLink to="/" className="navLinks">HOME</NavLink></li>
 
-                    <li><NavLink to="/Search" className="navLinks">SEARCH</NavLink></li>
-                {/*        
+                {/*    <li><NavLink to="/Search" className="navLinks">SEARCH</NavLink></li>
+                        
                     <li><NavLink to="/PostAJob" className="navLinks">POST A JOB</NavLink></li>
 
                     <li><NavLink to="/SignIn" className="navLinks">SIGN IN</NavLink></li>
@@ -139,7 +141,7 @@ export default React.createClass({
         <div id="titleOne">Welcome to </div>
         <div id="titleTwo"> Resume Builder</div>
         <br />
-        <div id="subtitle">A place for students to gain work experience. </div>
+        <div id="subtitle">A place for job seekers to gain work experience. </div>
     </div>
 
 
@@ -156,7 +158,9 @@ export default React.createClass({
         id="searchForm" >
 
     <div id="jobSearchDiv">
-    <span id="searchGlyphicon"> <img id="searchGlyphiconImg" src="./assets/img/glyphicons-search.png"/></span>
+    
+    <span id="searchGlyphicon"> 
+    <img id="searchGlyphiconImg" src="./assets/img/glyphicons-search.png"/></span>
         <input 
         onChange={this.handleChange} 
         type="text" 
@@ -208,10 +212,10 @@ export default React.createClass({
 </div> {/* END JUMBOTRON ROW */}
 
     
-       <Results jobresults={this.state.results} jobResultsGlassdoor={this.state.glassdoor} /> 
-
+       <Results jobresults={this.state.results} /> 
     </div> {/* END CONTAINER */} 
 
+    <footer class="footer text-center"><p>Copyright @ 2017 Resume Builder</p></footer>
 
 </div>
 
