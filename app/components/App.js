@@ -215,7 +215,7 @@ export default React.createClass({
        <Results jobresults={this.state.results} /> 
     </div> {/* END CONTAINER */} 
 
-    <footer class="footer text-center"><p>Copyright @ 2017 Resume Builder</p></footer>
+    <footer className="footer text-center"><p>Copyright @ 2017 Resume Builder</p></footer>
 
 </div>
 

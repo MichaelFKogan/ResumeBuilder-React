@@ -25509,7 +25509,39 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	var locale = "";
 	var results = [];
+
+	// GOOGLE PLACES AUTOCOMPLETE
+	// ============================================
+
+	function initialize() {
+
+	    var options = {
+	        types: ['(cities)'],
+	        componentRestrictions: { country: "us" }
+	    };
+
+	    var input = document.getElementById('location');
+	    var autocomplete = new google.maps.places.Autocomplete(input, options);
+
+	    autocomplete.addListener('place_changed', fillInAddress);
+
+	    function fillInAddress() {
+	        // Get the place details from the autocomplete object.
+	        var place = autocomplete.getPlace();
+	        var address = place.formatted_address.replace(", USA", "");
+
+	        $('#location').val(address);
+	        locale = address;
+	    }
+	}
+
+	google.maps.event.addDomListener(window, 'load', initialize);
+
+	// GOOGLE PLACES AUTOCOMPLETE
+	// ============================================
+
 
 	exports.default = _react2.default.createClass({
 	    displayName: 'App',
@@ -25518,7 +25550,7 @@
 	    // GETINITIALSTATE
 	    //============================================================
 	    getInitialState: function getInitialState() {
-	        return { location: "", keyword: "", results: [], history: "" };
+	        return { location: "", value: "", keyword: "", results: [], history: "" };
 	    },
 
 	    // HANDLECHANGE
@@ -25526,9 +25558,6 @@
 	    handleChange: function handleChange(event) {
 
 	        switch (event.target.id) {
-	            case "location":
-	                this.setState({ location: event.target.value });
-	                break;
 	            case "keyword":
 	                this.setState({ keyword: event.target.value });
 	                break;
@@ -25542,50 +25571,19 @@
 	        var results = [];
 
 	        // Search Indeed 0-25 Search Results
-	        _helpers2.default.runQuery(this.state.location, this.state.keyword).then(function (data) {
+	        _helpers2.default.runQuery(locale, this.state.keyword).then(function (data) {
 	            if (data !== this.state.results) {
-	                for (var i = 0; i <= data.results.length - 1; i++) {
-	                    results.push(data.results[i]);
+	                for (var i = 0; i <= data.length - 1; i++) {
+	                    results.push(data[i]);
 	                }
 	                this.setState({ results: results });
 	            }
 	        }.bind(this));
 
-	        // Search Indeed 25-50 Search Results
+	        this.setState({ results: [] });
 
-	        //   helpers.runQueryOne(this.state.location, this.state.keyword).then(function(data){
-	        //   if (data !== this.state.results){            
-	        //       for(var i=0;i<=data.length-1;i++){
-	        //           results.push(data[i]);
-	        //       }        
-	        //       this.setState({results: results});
-	        //   }
-	        // }.bind(this));  
-
-	        // Search Indeed 50-75 Search Results
-
-	        //   helpers.runQueryTwo(this.state.location, this.state.keyword).then(function(data){
-	        //   if (data !== this.state.results){            
-	        //       for(var i=0;i<=data.length-1;i++){
-	        //           results.push(data[i]);
-	        //       }        
-	        //       this.setState({results: results});
-	        //   }
-	        // }.bind(this));  
-
-	        // Search Indeed 75-100 Search Results
-
-	        //   helpers.runQueryThree(this.state.location, this.state.keyword).then(function(data){
-	        //   if (data !== this.state.results){            
-	        //       for(var i=0;i<=data.length-1;i++){
-	        //           results.push(data[i]);
-	        //       }       
-	        //       this.setState({results: results});
-	        //   }
-	        // }.bind(this));  
-
-	        // this.setState({results: [] });
-	        // this.setState({ keyword: ""});
+	        $('#keyword').val("");
+	        $('#location').val("");
 	    },
 
 	    render: function render() {
@@ -25621,15 +25619,6 @@
 	                                    { to: '/', className: 'navLinks' },
 	                                    'HOME'
 	                                )
-	                            ),
-	                            _react2.default.createElement(
-	                                'li',
-	                                null,
-	                                _react2.default.createElement(
-	                                    _NavLink2.default,
-	                                    { to: '/Search', className: 'navLinks' },
-	                                    'SEARCH'
-	                                )
 	                            )
 	                        )
 	                    )
@@ -25658,7 +25647,7 @@
 	                        _react2.default.createElement(
 	                            'div',
 	                            { id: 'subtitle' },
-	                            'A place for students to gain work experience. '
+	                            'A place for job seekers to gain work experience. '
 	                        )
 	                    ),
 	                    _react2.default.createElement(
@@ -25679,7 +25668,6 @@
 	                                _react2.default.createElement(
 	                                    'span',
 	                                    { id: 'searchGlyphicon' },
-	                                    ' ',
 	                                    _react2.default.createElement('img', { id: 'searchGlyphiconImg', src: './assets/img/glyphicons-search.png' })
 	                                ),
 	                                _react2.default.createElement('input', {
@@ -25709,7 +25697,7 @@
 	                                    placeholder: 'Location...',
 	                                    id: 'location',
 	                                    name: 'location',
-	                                    autoComplete: 'off'
+	                                    autoComplete: 'on'
 	                                })
 	                            ),
 	                            _react2.default.createElement(
@@ -25768,9 +25756,18 @@
 	                    ' '
 	                ),
 	                ' ',
-	                _react2.default.createElement(_Results2.default, { jobresults: this.state.results, jobResultsGlassdoor: this.state.glassdoor })
+	                _react2.default.createElement(_Results2.default, { jobresults: this.state.results })
 	            ),
-	            ' '
+	            ' ',
+	            _react2.default.createElement(
+	                'footer',
+	                { 'class': 'footer text-center' },
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    'Copyright @ 2017 Resume Builder'
+	                )
+	            )
 	        );
 	    }
 	});
@@ -26426,7 +26423,7 @@
 	                                    _react2.default.createElement(
 	                                        'span',
 	                                        { className: 'companyLocation' },
-	                                        search.formattedLocation
+	                                        search.location
 	                                    ),
 	                                    _react2.default.createElement(
 	                                        'p',
@@ -26436,8 +26433,8 @@
 	                                            null,
 	                                            _react2.default.createElement(
 	                                                'a',
-	                                                { href: search.url },
-	                                                search.jobtitle
+	                                                { href: search.detailUrl },
+	                                                search.jobTitle
 	                                            )
 	                                        )
 	                                    )
@@ -26460,20 +26457,7 @@
 	                                        )
 	                                    )
 	                                ),
-	                                _react2.default.createElement(
-	                                    'div',
-	                                    { className: 'row' },
-	                                    _react2.default.createElement(
-	                                        'button',
-	                                        { onClick: '', className: ' btn btn-default btn-xs saveButton' },
-	                                        'Save'
-	                                    ),
-	                                    _react2.default.createElement(
-	                                        'p',
-	                                        { className: 'snippet' },
-	                                        search.snippet
-	                                    )
-	                                ),
+	                                _react2.default.createElement('div', { className: 'row' }),
 	                                _react2.default.createElement('hr', { className: 'hrResults' })
 	                            );
 	                        })
@@ -26482,16 +26466,7 @@
 	                ),
 	                ' '
 	            ),
-	            ' ',
-	            _react2.default.createElement(
-	                'footer',
-	                { className: 'footer text-center' },
-	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    '@ Copyright Resume Builder 2017'
-	                )
-	            )
+	            ' '
 	        );
 	    }
 	});
@@ -26505,39 +26480,60 @@
 	// Include the axios package for performing HTTP requests (promise based alternative to request)
 	var axios = __webpack_require__(232);
 
-	var num = "0";
-	var queryURL = "";
-	var keyword = "";
-
-	var queryURLWithKeyword = "https://api.indeed.com/ads/apisearch?publisher=4548195452860771&v=2&format=json&q=" + keyword + "&l=" + location + "&sort=date&radius=25&start=" + num + "&limit=25&latlong=1&co=us&userip=1.2.3.4&useragent=GoogleChrome&v=2";
-
-	var queryURLJustLocation = "https://api.indeed.com/ads/apisearch?publisher=4548195452860771&v=2&format=json&q=&l=" + location + "&sort=date&radius=25&start=" + num + "&limit=25&latlong=1&co=us&userip=1.2.3.4&useragent=GoogleChrome&v=2";
+	var num = "1";
 
 	// Helper functions for making API Calls
 	var helper = {
 
 	    // This function serves our purpose of running the query to Indeed.
 	    runQuery: function runQuery(location, keyword) {
-	        keyword = keyword;
 
-	        if (keyword) {
-	            queryURL = queryURLWithKeyword;
+	        if (keyword && location) {
+	            console.log("if keyword && location: " + keyword + " " + location);
+	            var queryURL = "http://service.dice.com/api/rest/jobsearch/v1/simple.json?text=" + keyword + "&city=" + location + "&country=US&age=21&page=" + num + "&pgcnt=50";
+	        } else if (keyword) {
+	            console.log("else if keyword: " + keyword);
+	            var queryURL = "http://service.dice.com/api/rest/jobsearch/v1/simple.json?text=" + keyword + "&city=NewYork,NY&country=US&age=21&page=" + num + "&pgcnt=50";
+	        } else if (location) {
+	            console.log("else if location: " + location);
+	            var queryURL = "http://service.dice.com/api/rest/jobsearch/v1/simple.json?&city=" + location + "&country=US&age=21&page=" + num + "&pgcnt=50";
 	        } else {
-	            queryURL = queryURLJustLocation;
+	            console.log("else: no location or keyword");
+	            var queryURL = "http://service.dice.com/api/rest/jobsearch/v1/simple.json?&city=New+York,+NY&country=US&age=21&page=" + num + "&pgcnt=50";
 	        }
-	        return $.ajax({ url: queryURL, method: 'GET' }).done(function (response) {
+
+	        return axios.get(queryURL).then(function (response) {
 	            if (response) {
-	                console.log(response.results);
-	                return response.results;
+	                return response.data.resultItemList;
 	            }
 	            return "";
 	        }); /* END AXIOS.GET */
-	    } /* END RUNQUERY */
-
-	}; /* END HELPER */
+	    } }; /* END HELPER */
 
 	// We export the API helper
 	module.exports = helper;
+
+	// "http://service.dice.com/api/rest/jobsearch/v1/simple.json?text="+keyword+"&city="+location+"&country=US&age=21&page="+num+"&pgcnt=50" 
+
+	// second page of results, search for java jobs in United States no more than 21 days old"
+
+	// direct - (optional) if the value of this parameter is "1" then jobs returned will be direct hire
+	// areacode - (optional) specify the jobs area code
+	// country - (optional) specify the jobs ISO 3166 country code
+	// state - (optional) specify the jobs United States Post Office state code
+	// skill - (optional) specify search text for the jobs skill property
+	// city - (optional) specify the jobs United States Post Office ZipCode as the center of 40 mile radius
+
+	// text - (optional) specify search text for the jobs entire body
+	// ip - (optional) specify an IP address that will be used to look up a geocode which will be used in the search
+	// age - (optional) specify a posting age (a.k.a. days back)
+	// diceid - (optional) specify a Dice customer ID to find only jobs from that company
+	// page - (optional) specify a page number of the results to be displayed (1 based)
+	// pgcnt - (optional) specify the number of results per page
+
+	// sort - (optional) specify a sort paremeter; sort=1 sorts by posted age, sort=2 sorts by job title, sort=3 sorts by company, sort=4 sorts by location
+
+	// sd - (optional) sort direction; sd=a sort order is ASCENDING sd=d sort order is DESCENDING
 
 /***/ },
 /* 232 */
