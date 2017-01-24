@@ -32,8 +32,9 @@ export default React.createClass({
         {/*x++*/}
 
         <div className="row">
-            <span className="companyLocation">{search.location}</span>
-            <p className="jobTitle"><strong><a href={search.detailUrl}>{search.jobTitle}</a></strong></p>
+            <span className="companyLocation">{search.formattedLocation}</span>
+            <p className="jobTitle">
+            <strong><a href={search.url} target="_blank">{search.jobtitle}</a></strong></p>
         </div>
         <div className="row">    
             <p className="date">{search.date.split("", 12)}</p>
@@ -41,7 +42,7 @@ export default React.createClass({
         </div>
         <div className="row">
           {/*  <button onClick="" className=" btn btn-default btn-xs saveButton">Save</button> */}
-          {/*  <p className="snippet">{search.snippet}</p>   */}
+            <p className="snippet">{search.snippet}</p>  
         </div>
             <hr className="hrResults"/>
 
