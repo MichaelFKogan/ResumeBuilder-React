@@ -11,22 +11,22 @@ runQuery: function(location, keyword) {
 
 if(keyword && location){
   console.log("if keyword && location: "+keyword +" "+location);
-   var queryURL = "http://service.dice.com/api/rest/jobsearch/v1/simple.json?text="+keyword+"&city="+location+"&country=US&age=21&page="+num+"&pgcnt=50" 
+   var queryURL = "https://service.dice.com/api/rest/jobsearch/v1/simple.json?text="+keyword+"&city="+location+"&country=US&age=21&page="+num+"&pgcnt=50" 
 }
 
 else if(keyword){
   console.log("else if keyword: "+keyword);
-   var queryURL = "http://service.dice.com/api/rest/jobsearch/v1/simple.json?text="+keyword+"&city=NewYork,NY&country=US&age=21&page="+num+"&pgcnt=50" 
+   var queryURL = "https://service.dice.com/api/rest/jobsearch/v1/simple.json?text="+keyword+"&city=NewYork,NY&country=US&age=21&page="+num+"&pgcnt=50" 
 }
 
 else if(location){
   console.log("else if location: "+location);
-   var queryURL = "http://service.dice.com/api/rest/jobsearch/v1/simple.json?&city="+location+"&country=US&age=21&page="+num+"&pgcnt=50" 
+   var queryURL = "https://service.dice.com/api/rest/jobsearch/v1/simple.json?&city="+location+"&country=US&age=21&page="+num+"&pgcnt=50" 
 }
 
 else{
   console.log("else: no location or keyword");
-   var queryURL = "http://service.dice.com/api/rest/jobsearch/v1/simple.json?&city=New+York,+NY&country=US&age=21&page="+num+"&pgcnt=50" 
+   var queryURL = "https://service.dice.com/api/rest/jobsearch/v1/simple.json?&city=New+York,+NY&country=US&age=21&page="+num+"&pgcnt=50" 
 }
         
         return axios.get(queryURL).then(function(response) {
