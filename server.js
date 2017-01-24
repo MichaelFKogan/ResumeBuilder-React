@@ -36,33 +36,6 @@ app.get('*', (req, res) => {
 
 
 
-
-// PRACTICE SERVER REQUEST TO INDEED API - DELETE IF NOT WORKING
-// =====================================================
-
-var num = "0";
-var location = "New York";
-var queryURL = "https://api.indeed.com/ads/apisearch?publisher=4548195452860771&v=2&format=json&q=&l="+ location +"&sort=date&radius=25&start="+num+"&limit=25&latlong=1&co=us&userip=1.2.3.4&useragent=GoogleChrome&v=2";
-app.get('/', function(req, res) {
-
-
-// request('http://www.google.com', function (error, response, body) {
-//   if (!error && response.statusCode == 200) {
-//     console.log(body) // Show the HTML for the Google homepage. 
-//   }
-request(queryURL, function(error, response, body) {
-        // console.log(body);
-        
-
-res.send(response); 
-  })
-});
-
-// PRACTICE SERVER REQUEST TO INDEED API - DELETE IF NOT WORKING
-// =====================================================
-
-
-
 function renderPage(appHtml) {
   return `
     <!doctype html public="storage">
