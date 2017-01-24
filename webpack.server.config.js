@@ -21,7 +21,8 @@ module.exports = {
 
   node: {
     __filename: false,
-    __dirname: false
+    __dirname: false,
+    fs: "empty"
   },
 
   module: {

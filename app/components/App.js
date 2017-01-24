@@ -78,7 +78,8 @@ export default React.createClass({
       var results = [];
 
       // Search Indeed 0-25 Search Results
-      helpers.runQuery(locale, this.state.keyword).then(function(data){
+      helpers.runQuery()(locale, this.state.keyword)
+      .then(function(data){
         if (data !== this.state.results){
             for(var i=0;i<=data.length-1;i++){
                 results.push(data[i]);
@@ -89,8 +90,8 @@ export default React.createClass({
 
       this.setState({results: [] });
 
-      $('#keyword').val("");
-      $('#location').val("");
+      // $('#keyword').val("");
+      // $('#location').val("");
 
   },
 
