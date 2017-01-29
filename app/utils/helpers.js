@@ -1,5 +1,4 @@
 // Include the axios package for performing HTTP requests (promise based alternative to request)
-var Indeed = require('indeed-api-client')
 
 // Helper functions for making API Calls
 var helper = {

@@ -75,23 +75,40 @@ export default React.createClass({
 //============================================================
   handleSubmit: function(event) {
       event.preventDefault();
-      var results = [];
+      var results = []; 
+      var userData = {location: locale, keyword: this.state.keyword};
+
+      // Grab the URL of the website
+        var currentURL = window.location.origin;
+
+        // AJAX post the data to the friends API. 
+        $.post(currentURL + "/", userData, function(data){
+            console.log(data);
+          // Grab the result from the AJAX post so that the best match's name and photo are displayed.
+          
+          // $("#matchName").text(data.name);
+          // $('#matchImg').attr("src", data.photo);
+
+          // Show the modal with the best match 
+          // $("#resultsModal").modal('toggle');
+
+        });
 
       // Search Indeed 0-25 Search Results
-      helpers.runQuery()(locale, this.state.keyword)
-      .then(function(data){
-        if (data !== this.state.results){
-            for(var i=0;i<=data.length-1;i++){
-                results.push(data[i]);
-            }        
-            this.setState({results: results});
-        }
-      }.bind(this));  
+      // helpers.runQuery()(locale, this.state.keyword)
+      // .then(function(data){
+      //   if (data !== this.state.results){
+      //       for(var i=0;i<=data.length-1;i++){
+      //           results.push(data[i]);
+      //       }        
+      //       this.setState({results: results});
+      //   }
+      // }.bind(this));  
 
       this.setState({results: [] });
 
-      // $('#keyword').val("");
-      // $('#location').val("");
+      $('#keyword').val("");
+      $('#location').val("");
 
   },
 
@@ -154,8 +171,8 @@ export default React.createClass({
     <form 
         onSubmit={this.handleSubmit}
         className="create-form" 
-        action="/search" 
-        method="GET" 
+        // action="/" 
+        // method="POST" 
         id="searchForm" >
 
     <div id="jobSearchDiv">
@@ -176,7 +193,7 @@ export default React.createClass({
     <div id="locationSearchDiv">
     <span id="mapGlyphicon"> <img id="mapGlyphiconImg" src="./assets/img/glyphicons-map.png"/> </span>
     <input 
-        onChange={this.handleChange} 
+        // onChange={this.handleChange} 
         type="text" 
         className="form-control" 
         placeholder="Location..." 

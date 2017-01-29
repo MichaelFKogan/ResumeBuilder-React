@@ -3,14 +3,15 @@ var path = require('path');
 var compression = require('compression');
 var react = require('react');
 var request = require('request');
-
-// import { renderToString } from 'react-dom/server'
-// import { match, RouterContext } from 'react-router'
-// import routes from './modules/routes'
-// import cors from 'cors'
-// import request from 'request'
+var bodyParser = require('body-parser');
+var methodOverride = require('method-override');
 
 var app = express()
+
+app.use(bodyParser.urlencoded({extended: false}));
+// override with POST having ?_method=DELETE
+app.use(methodOverride('_method'));
+
 
 app.use(compression())
 // app.use(cors());
@@ -20,11 +21,16 @@ app.use(express.static(path.join(__dirname, 'public'), {index: false}))
 
 // send all requests to index.html so browserHistory works
 
-// app.get('*', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'public/index.html'));
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/index.html'));
 
-//   })
+  })
 
+
+
+
+
+// DON'T KNOW WHAT THIS IS. LEFTOVER CODE
   // match({ routes, location: req.url }, (err, redirect, props) => {
   //   if (err) {
   //     res.status(500).send(err.message)
@@ -40,16 +46,44 @@ app.use(express.static(path.join(__dirname, 'public'), {index: false}))
   // })
 // })
 
-app.get('/', function(req,res) {
-request("http://api.indeed.com/ads/apisearch?publisher=4548195452860771&v=2&format=json&q=&l=NewYork,NY&sort=date&radius=25&start=0&limit=25&latlong=1&co=us&userip=1.2.3.4&useragent=GoogleChrome&v=2", function (error, response, body) {
+
+
+
+
+
+
+
+app.post('/', function(req, res) {
+
+console.log("========================================")
+console.log(req.body.keyword);
+console.log(req.body.location);
+console.log("========================================")
+
+function runQuery(keyword, location){
+  request("http://api.indeed.com/ads/apisearch?publisher=4548195452860771&v=2&format=json&q="+keyword+"&l="+location+"&sort=date&radius=25&start=0&limit=25&latlong=1&co=us&userip=1.2.3.4&useragent=GoogleChrome&v=2", function (error, response, body) {
   if (!error && response.statusCode == 200) {
-    console.log(body) // Show the HTML for the Google homepage. 
-  }
-  res.json(body);
+    console.log(body) // Show the HTML for the INDEED API.
+        }
     })
+} 
+   runQuery(req.body.keyword, req.body.location);
 });
 
 
+
+
+
+app.get('/', function(req, res){
+
+});
+
+
+
+
+
+
+// DON'T KNOW WHAT THIS IS. LEFTOVER CODE
 // function renderPage(appHtml) {
 //   return `
 //     <!doctype html public="storage">
